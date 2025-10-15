@@ -1,0 +1,80 @@
+<!doctype html>
+<div class="right-head">
+<div class="streak">🔥 <span id="streakCount">0</span></div>
+<button id="todayBtn" class="btn ghost">Hoje</button>
+</div>
+</header>
+
+
+<main class="container">
+<section class="left">
+<div class="card dateCard">
+<label>Data</label>
+<input id="dateInput" type="date" />
+<div class="dayPoints">Pontos neste dia: <strong id="dayPoints">0</strong></div>
+</div>
+
+
+<div class="card presets">
+<h3>Conquistas Rápidas</h3>
+<div id="presetList" class="presetList"></div>
+</div>
+
+
+<div class="card addCard">
+<h3>Adicionar conquista</h3>
+<form id="addForm">
+<input id="newTitle" placeholder="Ex: Fazer alongamento" />
+<select id="newPoints">
+<option value="1">Fácil — 1 ponto</option>
+<option value="2">Médio — 2 pontos</option>
+<option value="3">Difícil — 3 pontos</option>
+</select>
+<button class="btn primary" type="submit">Adicionar</button>
+</form>
+</div>
+
+
+<div class="card dayEntries">
+<h3>Entradas — <span id="entriesDate"></span></h3>
+<ul id="entriesList" class="entriesList"></ul>
+</div>
+</section>
+
+
+<aside class="right">
+<div class="card chartCard">
+<h3>Progresso (últimos 14 dias)</h3>
+<canvas id="progressChart" height="200"></canvas>
+</div>
+
+
+<div class="card manageCard">
+<h3>Salvar / Restaurar</h3>
+<div class="controls">
+<button id="exportBtn" class="btn">Exportar JSON</button>
+<label class="fileLabel btn">Importar JSON <input id="importFile" type="file" accept="application/json" hidden /></label>
+<button id="resetBtn" class="btn danger">Resetar tudo</button>
+</div>
+</div>
+
+
+<div class="card tipsCard">
+<h3>Dicas</h3>
+<ul>
+<li>Marque ao menos 1 pequena vitória por dia para manter a sequência.</li>
+<li>Use conquistas fáceis para ganhar consistência.</li>
+<li>Exporte seus dados antes de resetar.</li>
+</ul>
+</div>
+</aside>
+</main>
+
+
+<footer class="footer">Level Day • Prototipo — pronto para GitHub Pages</footer>
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>
