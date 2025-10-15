@@ -4,51 +4,51 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Level Day — Pequenas Vitórias</title>
-
-  <!-- Meta para preview (opcional, bom para GitHub Pages) -->
-  <meta name="description" content="Level Day — colecione pequenas vitórias, mantenha streak e acompanhe seu progresso.">
-  <meta property="og:title" content="Level Day — Pequenas Vitórias">
-  <meta property="og:description" content="Colete pequenas vitórias, mantenha streak e acompanhe seu progresso.">
-  <meta property="og:type" content="website">
-
-  <!-- Estilos -->
+  <meta name="description" content="Level Day — registre pequenas conquistas, acumule pontos e mantenha a intensiva diária.">
   <link rel="stylesheet" href="style.css">
-
-  <!-- Chart.js CDN (necessário para o gráfico) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div class="app">
-    <header class="top">
+    <header class="header">
       <div class="brand">
-        <div class="logo">🌌</div>
-        <div>
+        <div class="logo">LD</div>
+        <div class="brand-text">
           <h1>Level Day</h1>
-          <p class="subtitle">Colete pequenas vitórias — evolua todos os dias</p>
+          <p class="subtitle">Pequenas vitórias. Grande evolução.</p>
         </div>
       </div>
-      <div class="right-head">
-        <div class="streak">🔥 <span id="streakCount">0</span></div>
-        <button id="todayBtn" class="btn ghost">Hoje</button>
+
+      <div class="header-actions">
+        <div class="streak-box">
+          <div class="streak-label">Intensiva</div>
+          <div id="streakCount" class="streak-value">0 🔥</div>
+        </div>
+        <button id="todayBtn" class="btn small ghost">Hoje</button>
       </div>
     </header>
 
-    <main class="container">
-      <section class="left">
-        <div class="card dateCard">
-          <label>Data</label>
+    <main class="main-grid">
+      <!-- LEFT: controls -->
+      <section class="panel left-panel">
+        <div class="card card-date">
+          <label for="dateInput">Data</label>
           <input id="dateInput" type="date" />
-          <div class="dayPoints">Pontos neste dia: <strong id="dayPoints">0</strong></div>
+          <div class="day-summary">Pontos neste dia: <strong id="dayPoints">0</strong></div>
         </div>
 
-        <div class="card presets">
-          <h3>Conquistas Rápidas</h3>
-          <div id="presetList" class="presetList"></div>
+        <div class="card card-presets">
+          <div class="card-head">
+            <h2>Conquistas rápidas</h2>
+            <button id="shufflePresets" class="btn tiny">Shuffle</button>
+          </div>
+          <div id="presetList" class="preset-list"></div>
         </div>
 
-        <div class="card addCard">
-          <h3>Adicionar conquista</h3>
-          <form id="addForm">
+        <div class="card card-add">
+          <h2>Adicionar conquista</h2>
+          <form id="addForm" class="add-form">
             <input id="newTitle" placeholder="Ex: Fazer alongamento" required />
             <select id="newPoints">
               <option value="1">Fácil — 1 ponto</option>
@@ -59,44 +59,65 @@
           </form>
         </div>
 
-        <div class="card dayEntries">
-          <h3>Entradas — <span id="entriesDate"></span></h3>
-          <ul id="entriesList" class="entriesList"></ul>
+        <div class="card card-entries">
+          <h2>Entradas — <span id="entriesDate"></span></h2>
+          <ul id="entriesList" class="entries-list"></ul>
         </div>
       </section>
 
-      <aside class="right">
-        <div class="card chartCard">
-          <h3>Progresso (últimos 14 dias)</h3>
-          <canvas id="progressChart" height="200"></canvas>
+      <!-- RIGHT: stats -->
+      <aside class="panel right-panel">
+        <div class="card card-overview">
+          <div class="overview-top">
+            <div class="progress-ring" id="progressRing">
+              <svg viewBox="0 0 36 36" class="c-r">
+                <path class="c-bg" d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path id="ringValue" class="c-value" d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <text x="18" y="20.35" class="c-text" id="totalPoints">0</text>
+              </svg>
+            </div>
+            <div class="overview-text">
+              <div class="overview-title">Pontos totais</div>
+              <div class="overview-sub" id="totalPointsText">0 pontos</div>
+            </div>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="progressChart"></canvas>
+          </div>
         </div>
 
-        <div class="card manageCard">
-          <h3>Salvar / Restaurar</h3>
+        <div class="card card-manage">
+          <h2>Salvar / Restaurar</h2>
           <div class="controls">
             <button id="exportBtn" class="btn">Exportar JSON</button>
-            <label class="fileLabel btn">Importar JSON
-              <input id="importFile" type="file" accept="application/json" hidden>
+            <label class="btn file-label">Importar JSON
+              <input id="importFile" type="file" accept="application/json" hidden />
             </label>
             <button id="resetBtn" class="btn danger">Resetar tudo</button>
           </div>
         </div>
 
-        <div class="card tipsCard">
-          <h3>Dicas</h3>
+        <div class="card card-tips">
+          <h2>Dicas rápidas</h2>
           <ul>
-            <li>Marque ao menos 1 pequena vitória por dia para manter a sequência.</li>
-            <li>Use conquistas fáceis para ganhar consistência.</li>
-            <li>Exporte seus dados antes de resetar.</li>
+            <li>Marque ao menos 1 conquista por dia para manter a intensiva.</li>
+            <li>Comece com conquistas fáceis para garantir consistência.</li>
+            <li>Exporte antes de resetar.</li>
           </ul>
         </div>
       </aside>
     </main>
 
-    <footer class="footer">Level Day • Protótipo — feito por Leonardo Ferrer</footer>
+    <footer class="footer">
+      <div>Feito por <strong>Leonardo Ferrer</strong> • Pronto para GitHub Pages</div>
+    </footer>
   </div>
 
-  <!-- Script principal (carregado no final para garantir DOM pronto) -->
   <script src="script.js"></script>
 </body>
 </html>
