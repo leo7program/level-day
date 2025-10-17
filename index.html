@@ -1,121 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Level Day — Pequenas Vitórias</title>
-  <meta name="description" content="Level Day — registre pequenas conquistas, acumule pontos e mantenha a intensiva diária.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level Day</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="app">
-    <header class="header">
-      <div class="brand">
-        <div class="logo">LD</div>
-        <div class="brand-text">
-          <h1>Level Day</h1>
-          <p class="subtitle">Pequenas vitórias. Grande evolução.</p>
-        </div>
-      </div>
+  <!-- Tela de Login -->
+  <div id="loginScreen" class="screen">
+    <div class="login-box">
+      <h1>Level Day</h1>
+      <input type="text" id="username" placeholder="Usuário">
+      <input type="password" id="password" placeholder="Senha">
+      <button id="loginBtn">Entrar / Registrar</button>
+      <div id="loginError" class="error"></div>
+    </div>
+  </div>
 
-      <div class="header-actions">
-        <div class="streak-box">
-          <div class="streak-label">Intensiva</div>
-          <div id="streakCount" class="streak-value">0 🔥</div>
-        </div>
-        <button id="todayBtn" class="btn small ghost">Hoje</button>
-      </div>
+  <!-- Tela principal -->
+  <div id="appScreen" class="screen hidden">
+    <header>
+      <h1>Level Day</h1>
+      <button id="logoutBtn">Sair</button>
     </header>
 
-    <main class="main-grid">
-      <!-- LEFT: controls -->
-      <section class="panel left-panel">
-        <div class="card card-date">
-          <label for="dateInput">Data</label>
-          <input id="dateInput" type="date" />
-          <div class="day-summary">Pontos neste dia: <strong id="dayPoints">0</strong></div>
-        </div>
+    <main>
+      <section>
+        <h2>Hoje: <span id="todayDate"></span></h2>
+        <h3>Pontos do dia: <span id="dayPoints">0</span></h3>
 
-        <div class="card card-presets">
-          <div class="card-head">
-            <h2>Conquistas rápidas</h2>
-            <button id="shufflePresets" class="btn tiny">Shuffle</button>
-          </div>
-          <div id="presetList" class="preset-list"></div>
-        </div>
+        <div id="presetList" class="preset-list"></div>
 
-        <div class="card card-add">
-          <h2>Adicionar conquista</h2>
-          <form id="addForm" class="add-form">
-            <input id="newTitle" placeholder="Ex: Fazer alongamento" required />
-            <select id="newPoints">
-              <option value="1">Fácil — 1 ponto</option>
-              <option value="2">Médio — 2 pontos</option>
-              <option value="3">Difícil — 3 pontos</option>
-            </select>
-            <button class="btn primary" type="submit">Adicionar</button>
-          </form>
-        </div>
+        <form id="addForm">
+          <input id="newTitle" placeholder="Nova conquista" required>
+          <select id="newPoints">
+            <option value="1">Fácil — 1 ponto</option>
+            <option value="2">Médio — 2 pontos</option>
+            <option value="3">Difícil — 3 pontos</option>
+          </select>
+          <button type="submit">Adicionar</button>
+        </form>
 
-        <div class="card card-entries">
-          <h2>Entradas — <span id="entriesDate"></span></h2>
-          <ul id="entriesList" class="entries-list"></ul>
-        </div>
+        <h3>Conquistas do dia</h3>
+        <ul id="entriesList"></ul>
       </section>
 
-      <!-- RIGHT: stats -->
-      <aside class="panel right-panel">
-        <div class="card card-overview">
-          <div class="overview-top">
-            <div class="progress-ring" id="progressRing">
-              <svg viewBox="0 0 36 36" class="c-r">
-                <path class="c-bg" d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                <path id="ringValue" class="c-value" d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                <text x="18" y="20.35" class="c-text" id="totalPoints">0</text>
-              </svg>
-            </div>
-            <div class="overview-text">
-              <div class="overview-title">Pontos totais</div>
-              <div class="overview-sub" id="totalPointsText">0 pontos</div>
-            </div>
-          </div>
-
-          <div class="chart-wrap">
-            <canvas id="progressChart"></canvas>
-          </div>
-        </div>
-
-        <div class="card card-manage">
-          <h2>Salvar / Restaurar</h2>
-          <div class="controls">
-            <button id="exportBtn" class="btn">Exportar JSON</button>
-            <label class="btn file-label">Importar JSON
-              <input id="importFile" type="file" accept="application/json" hidden />
-            </label>
-            <button id="resetBtn" class="btn danger">Resetar tudo</button>
-          </div>
-        </div>
-
-        <div class="card card-tips">
-          <h2>Dicas rápidas</h2>
-          <ul>
-            <li>Marque ao menos 1 conquista por dia para manter a intensiva.</li>
-            <li>Comece com conquistas fáceis para garantir consistência.</li>
-            <li>Exporte antes de resetar.</li>
-          </ul>
-        </div>
+      <aside>
+        <h3>Pontos totais: <span id="totalPointsText">0</span></h3>
+        <canvas id="progressChart"></canvas>
       </aside>
     </main>
+  </div>
 
-    <footer class="footer">
-      <div>Feito por <strong>Leonardo Ferrer</strong> • Pronto para GitHub Pages</div>
-    </footer>
+  <!-- Modal Parabéns -->
+  <div id="congratsModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>🎉 Parabéns! 🎉</h2>
+      <p>Você completou uma conquista!</p>
+      <button id="closeCongrats">Fechar</button>
+    </div>
+    <canvas id="confettiCanvas"></canvas>
   </div>
 
   <script src="script.js"></script>
